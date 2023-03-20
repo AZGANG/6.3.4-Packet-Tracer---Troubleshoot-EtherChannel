@@ -1,0 +1,77 @@
+Troubleshoot EtherChannel
+"show etherchannel summary" 
+show ip interface breif 
+"show int trunk"
+
+Whats wrong 
+"show etherchannel summary" first test on all switchs 
+1)  Po1(SD) LACP   Gig0/1(I) Gig0/2(I) needs to be protocol. 
+S3 
+2)wrong protocol need to fix all of them 
+Po1(SD)           PAgP   Gig0/1(I) Gig0/2(I) 
+Po4(SD)           PAgP   Fa0/23(I) Fa0/24(I) 
+Po6(SD)           PAgP   Fa0/21(I) Fa0/22(I)
+
+s1 
+interface should be up now check
+show etherchannel summary 
+
+s2 
+is all good 
+
+
+s4 
+need to config group 5 with a protocol 
+channel 4 has the wrong int on it 21 and 22 
+
+2nd test 
+show int trunk
+no trunks on S2 need to fix that for all 3 
+2,3,6
+
+
+how to fix
+SW3 
+"no int port-channel 1" on the switch to fully remove it 
+
+no int port-channel 1 
+no int port-channel 4
+no int port-channel 6
+
+int range g0/1 - 2
+shutdown
+no channel-group 1 
+channel-group 1 mode active 
+no shutdown 
+
+
+int range f0/23 - 24
+shutdown
+no channel-group 4 
+channel-group 4 mode active 
+no shutdown 
+
+
+int range f0/21 - 22
+shutdown
+no channel-group 6 
+channel-group 6 mode active 
+no shutdown 
+
+int range f0/21 - 22
+no channel-group 4 
+
+int range f0/21 - 22 
+shut 
+channel-group 5 mode active 
+no shutdown 
+
+
+int port-channel 2 
+switchport mode trunk 
+
+int port-channel 3
+switchport mode trunk  
+
+int port-channel 6
+switchport mode trunk 
